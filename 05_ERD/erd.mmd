@@ -1,0 +1,55 @@
+erDiagram
+    direction LR
+    SPECIALTY  |o--o{ CLINICIAN : "is primary specialty of"
+    PATIENT    ||--o{ APPOINTMENT : "attends"
+    CLINICIAN  ||--o{ APPOINTMENT : "conducts"
+    CLINIC     ||--o{ APPOINTMENT : "hosts"
+    APPOINTMENT ||--o{ APPT_DIAGNOSIS : "results in"
+    DIAGNOSIS  ||--o{ APPT_DIAGNOSIS : "is recorded in"
+    APPOINTMENT ||--o{ PRESCRIPTION : "may produce"
+    PRESCRIPTION ||--|{ PRESCRIPTION_ITEM : "contains"
+    MEDICINE   ||--o{ PRESCRIPTION_ITEM : "is listed in"
+    APPOINTMENT ||--o| FOLLOW_UP : "may generate"
+    SPECIALTY { int specialty_id PK
+                string specialty_name UK }
+    CLINICIAN { int clinician_id PK
+                string full_name
+                int specialty_id FK }
+    PATIENT { int patient_id PK
+              string patient_ref UK
+              string full_name
+              string postcode
+              date date_of_birth
+              string portal_salt
+              string portal_password_hash }
+    CLINIC { int clinic_id PK
+             string clinic_name UK
+             string postcode }
+    APPOINTMENT { int appointment_id PK
+                  int patient_id FK
+                  int clinician_id FK
+                  int clinic_id FK
+                  date appointment_date
+                  time appointment_time
+                  string notes }
+    DIAGNOSIS { int diagnosis_id PK
+                string diagnosis_name UK }
+    APPT_DIAGNOSIS { int appointment_id PK,FK
+                     int diagnosis_id PK,FK }
+    MEDICINE { int medicine_id PK
+               string medicine_name UK }
+    PRESCRIPTION { int prescription_id PK
+                   int appointment_id FK
+                   date issued_date }
+    PRESCRIPTION_ITEM { int item_id PK
+                        int prescription_id FK
+                        int medicine_id FK
+                        string dose
+                        string route
+                        string frequency
+                        int duration_days }
+    FOLLOW_UP { int follow_up_id PK
+                int appointment_id FK,UK
+                date due_date
+                string priority
+                string status }
